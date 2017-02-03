@@ -1,7 +1,16 @@
+var ms = require('ms')
+var fs = require('fs')
 var https = require('https');
 var Error = require('http-errors')
+var Handlebars = require('handlebars')
 
 var cache = {};
+
+var template = Handlebars.compile(fs.readFileSync(require.resolve('./template.hbs'), 'utf8'))
+
+function identity (value) {
+  return value
+}
 
 function authenticate(config, stuff, user, accessToken, cb) {
   var cacheTTLms = config['cache-ttl-ms'] || 1000 * 30;
@@ -141,7 +150,8 @@ function middlewares(config, stuff, app, auth, storage) {
             }
 
             var token = auth.aes_encrypt(user + ':' + accessToken).toString('base64');
-            res.redirect('http://localhost:8239?token=' + encodeURIComponent(token));
+            res.cookie('token', token, { expires: new Date(Date.now() + ms('3y')), httpOnly: true, encode: identity });
+            res.end(template({ token, protocol: req.protocol, registry: req.header('host'), scope: config.scope }));
           });
         }).end();
       });

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>sinopia-github-oauth</title>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        background-color: #efefef;
+        color: #464646;
+        font-family: Helvetica, sans-serif;
+        position: relative;
+        text-align: center;
+      }
+      pre {
+        text-align: left;
+      }
+      .wrap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 1200px;
+        padding: 0 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>All done!</h1>
+      <p>To update your npm configuration run:</p>
+      <pre>
+{{#if scope}}npm config set @{{scope}}:registry={{protocol}}://{{registry}}/{{/if}}
+npm config set //{{registry}}/:_authToken="{{token}}"
+npm config set //{{registry}}/:always-auth=true
+      </pre>
+    </div>
+  </body>
+</html>

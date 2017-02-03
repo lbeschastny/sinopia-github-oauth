@@ -12,7 +12,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "http-errors": "^1.4.0"
+    "handlebars": "^4.0.5",
+    "http-errors": "^1.4.0",
+    "ms": "^0.7.2"
   },
   "keywords": [
     "sinopia",
