@@ -2,6 +2,7 @@ var ms = require('ms')
 var fs = require('fs')
 var https = require('https');
 var Error = require('http-errors')
+var Cookies = require('cookies')
 var Handlebars = require('handlebars')
 
 var cache = {};
@@ -77,6 +78,18 @@ function middlewares(config, stuff, app, auth, storage) {
 
   if (clientId === undefined || clientSecret === undefined) {
     throw Error('server needs to be configured with github client id and secret')
+  }
+
+  if (config.require_auth) {
+    app.use(Cookies.express())
+    app.use(auth.cookie_middleware())
+    app.get('/', function (req, res, next) {
+      if (req.remote_user.name) {
+        next()
+      } else {
+        res.redirect('/oauth/authorize')
+      }
+    })
   }
 
   app.use('/oauth/authorize', function(req, res) {
